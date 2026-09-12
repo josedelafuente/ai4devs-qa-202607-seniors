@@ -31,21 +31,33 @@ Escribir pruebas end-to-end con Cypress sobre la vista «position» del reposito
 carga de la página —título, columnas por fase, candidatos en su columna— y el cambio de fase de un
 candidato mediante arrastre, comprobando que la fase se actualiza en el backend.
 
-## 2. El método, en el orden en que ocurrió
+## 2. El método de análisis y ejecución
 
-1. **Leer el destino antes que la lección.** Se leyó el enunciado y se escribió la lista de lo que hay
-   que responder; recién después se estudió el material del módulo, filtrando por esa lista.
-2. **Relevar el repositorio sin clonarlo**, con un agente de lectura acotado.
-3. **Desbloquear el riesgo antes de construir nada.** El único punto que podía invalidar el ejercicio
-   era si el arrastre se puede simular. Se resolvió con una sonda mínima antes de escribir la suite.
-4. **Verificar los tres endpoints contra el servidor real** y guardar las respuestas.
-5. **Escribir las pruebas**, y después **romperlas a propósito** para comprobar que detectan.
-6. **Revisión adversarial** antes de abrir el pull request.
+Seis pasos, en el orden en que se aplicaron sobre el repositorio. Cada uno existe porque el anterior
+dejó algo sin resolver.
 
-El paso 5 es el que le da sentido a los cuatro anteriores. La lección «Testing Asistido por AI» de este
-módulo advierte sobre el *test theater*: cobertura alta y baja capacidad de detectar regresiones
-reales. Sin romper a propósito lo que la suite dice vigilar, «esta prueba cuida X» es una intención y
-no un hecho — y de hecho aquí falló dos veces, con pruebas que sobre el papel parecían correctas.
+1. **Relevar el repositorio antes de clonarlo.** Saber qué mecanismo de arrastre usa la vista, qué
+   atributos expone el DOM y qué rutas registra el backend decide la estrategia de las pruebas. Se hizo
+   con un agente de lectura acotado, obligado a traer también lo que contradijera el encargo.
+2. **Verificar los contratos contra el servidor corriendo, no contra la documentación.** Los tres
+   endpoints se consultaron de verdad y las respuestas se guardaron. Ahí aparecieron la doble anidación
+   del flujo, la fase que viaja por nombre mientras la actualización espera un id, y el `orderIndex`
+   repetido entre dos fases.
+3. **Desbloquear el riesgo técnico antes de construir nada.** Un solo punto podía invalidar el
+   ejercicio entero: si el arrastre de `react-beautiful-dnd` no se puede disparar desde Cypress, el
+   segundo escenario del enunciado no existe. Se resolvió con una sonda mínima —una prueba que solo
+   mueve una tarjeta— antes de escribir una línea de la suite.
+4. **Establecer las precondiciones en vez de asumirlas.** Cada prueba impone por API la fase en que
+   arranca cada candidato. La base es persistente y cualquier uso de la aplicación la cambia, así que
+   una prueba que confía en el estado que encuentra pasa hoy y falla mañana sin que nadie toque el
+   código.
+5. **Escribir las pruebas y después romperlas a propósito.** La lección «Testing Asistido por AI» de
+   este módulo advierte sobre el *test theater*: cobertura alta y baja capacidad de detectar
+   regresiones reales. Sin mutar lo que la suite dice vigilar, «esta prueba cuida X» es una intención y
+   no un hecho. Aquí falló dos veces, con pruebas que sobre el papel parecían correctas.
+6. **Revisión adversarial antes de publicar.** Hecha sobre el código y sobre este documento, buscando
+   afirmaciones que el código no sostuviera y aserciones que pasaran con el sistema roto. De ahí
+   salieron tres correcciones a la suite.
 
 ## 3. Prompts literales — las instrucciones del humano
 
@@ -237,8 +249,12 @@ Archivo: `frontend/cypress/e2e/position.cy.js`. Especificación en Gherkin acord
 ## 8. Cuatro decisiones de diseño, cada una con su motivo medido
 
 1. **El estado de partida se impone por API, no se asume.** Una prueba falló porque un candidato estaba
-   en otra fase: alguien había usado la aplicación a mano. La base es compartida, y una prueba que
-   asume el seed pasa hoy y falla mañana sin que nadie toque el código.
+   en otra fase, después de probar el arrastre a mano en el navegador. La base es persistente y
+   mutable: sobrevive entre corridas y cualquier uso de la aplicación la cambia. Sin imponer el punto
+   de partida, un fallo significa dos cosas a la vez —el código se rompió, o los datos son otros— y
+   deja de servir para diagnosticar. Vigilar la consistencia de los datos vivos es un trabajo real,
+   pero es otro: validaciones de integridad sobre la base o monitoreo sintético del ambiente, no la
+   prueba que verifica una funcionalidad.
 2. **Las columnas se localizan por su título, nunca por índice.** Dos fases comparten `orderIndex` y su
    orden no está garantizado.
 3. **Ninguna aserción mira el lugar de una tarjeta dentro de su columna.** Ese orden no se persiste y la

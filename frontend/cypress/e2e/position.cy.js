@@ -13,9 +13,10 @@
  * motivo medido (el detalle está en la documentación de la entrega):
  *
  *   · El estado de partida se IMPONE por API en beforeEach, no se asume. La
- *     base es compartida y cualquier uso manual de la aplicación la deja en
- *     otro punto; un test que asume el seed pasa hoy y falla mañana sin que
- *     nadie toque el código.
+ *     base es persistente y cualquier uso de la aplicación la deja en otro
+ *     punto; un test que asume el seed pasa hoy y falla mañana sin que nadie
+ *     toque el código, y entonces su fallo ya no distingue un defecto del
+ *     código de un dato distinto.
  *   · Las columnas se localizan por su título, nunca por índice: dos fases del
  *     flujo comparten orderIndex y el orden en que llegan no está garantizado.
  *   · Ninguna aserción mira el lugar de una tarjeta DENTRO de su columna. Ese
