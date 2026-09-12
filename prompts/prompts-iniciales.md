@@ -42,9 +42,10 @@ candidato mediante arrastre, comprobando que la fase se actualiza en el backend.
 5. **Escribir las pruebas**, y después **romperlas a propósito** para comprobar que detectan.
 6. **Revisión adversarial** antes de abrir el pull request.
 
-El paso 5 es el que distingue este entregable. La lección «Testing Asistido por AI» de este módulo
-advierte sobre el *test theater*: cobertura alta y baja capacidad de detectar regresiones reales. La
-única forma de saber en qué lado se está es romper lo que la suite dice vigilar.
+El paso 5 es el que le da sentido a los cuatro anteriores. La lección «Testing Asistido por AI» de este
+módulo advierte sobre el *test theater*: cobertura alta y baja capacidad de detectar regresiones
+reales. Sin romper a propósito lo que la suite dice vigilar, «esta prueba cuida X» es una intención y
+no un hecho — y de hecho aquí falló dos veces, con pruebas que sobre el papel parecían correctas.
 
 ## 3. Prompts literales — las instrucciones del humano
 
