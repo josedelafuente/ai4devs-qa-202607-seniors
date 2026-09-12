@@ -16,7 +16,8 @@ prompts de generación del tipo «genera un test que…»**. Se dirigió como un
 la que el humano fija el criterio y decide, y el agente ejecuta, mide y reporta. Los prompts literales
 de este ejercicio son, entonces, de dos clases:
 
-- **Las instrucciones y decisiones del humano**, transcritas textualmente en la sección 3.
+- **Las instrucciones y decisiones del humano**, transcritas en la sección 3 con la ortografía y la
+  puntuación normalizadas, sin cambiar lo que dicen.
 - **Los briefs a los agentes de lectura**, que sí son prompts largos y estructurados. En la sección 4
   se reproduce completo el que decidió la estrategia de las pruebas.
 

@@ -115,5 +115,5 @@ control \
 restaurar
 {
   echo ""
-  echo "Archivos restaurados. Resultado completo en: $SALIDA"
+  echo "Archivos restaurados. Resultado completo en: ${SALIDA#$REPO/}"
 } | tee -a "$SALIDA"

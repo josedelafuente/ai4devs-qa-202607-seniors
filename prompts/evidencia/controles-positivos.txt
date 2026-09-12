@@ -140,4 +140,4 @@ MUTACIÓN: Se revierte el arreglo de la condición de carrera (las cargas vuelve
     1 failing
     1) Vista "position" — tablero de candidatos por fase
 
-Archivos restaurados. Resultado completo en: /home/josef/LIDR/clases/clase-11/ai4devs-qa-202607-seniors/prompts/evidencia/controles-positivos.txt
+Archivos restaurados. Resultado completo en: prompts/evidencia/controles-positivos.txt
