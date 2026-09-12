@@ -26,3 +26,7 @@ yarn-error.log*
 .vscode
 
 # .env
+# Cypress: artefactos de ejecucion, no se versionan
+frontend/cypress/screenshots/
+frontend/cypress/videos/
+frontend/cypress/downloads/
