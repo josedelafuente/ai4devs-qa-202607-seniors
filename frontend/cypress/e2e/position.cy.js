@@ -25,6 +25,23 @@
  * El arrastre se dispara con la interfaz de teclado de react-beautiful-dnd,
  * disponible porque la tarjeta lleva el dragHandle de la librería. Los eventos
  * de mouse sintéticos no sirven con esta librería.
+ *
+ * TRAZABILIDAD con cypress/features/position.feature, que es la especificación
+ * en Gherkin acordada antes de escribir estas pruebas:
+ *
+ *   Escenario del .feature                                    → prueba
+ *   ─────────────────────────────────────────────────────────────────────────
+ *   El tablero identifica la posición                         → 1
+ *   El tablero refleja el proceso completo                    → 2
+ *   Cada candidato aparece en la fase en la que se encuentra  → 3
+ *   Una fase sin candidatos se muestra igual, pero vacía      → 4
+ *   El tablero se arma completo aunque la información
+ *     llegue desordenada                                      → 5
+ *   El manager avanza a un candidato a la fase siguiente      → 6
+ *   El cambio de fase queda registrado en el sistema          → 7
+ *   El cambio sobrevive a volver a abrir el tablero           → 8
+ *   El manager devuelve a un candidato a una fase anterior    → 9
+ *   Una posición sin proceso definido no ofrece tablero       → 10
  */
 
 const API = 'http://localhost:3010';
@@ -127,16 +144,24 @@ describe('Vista "position" — tablero de candidatos por fase', () => {
           .should('exist')
           .within(() => {
             cy.get('[data-testid="candidate-name"]').should('have.text', candidato.nombre);
-            cy.get('[data-testid="candidate-score"]').should(
-              'have.attr',
-              'data-score',
-              candidato.puntuacion
-            );
+            cy.get('[data-testid="candidate-score"]')
+              .should('have.attr', 'data-score', candidato.puntuacion)
+              // También lo que ve la persona, no solo el atributo que existe
+              // para estas pruebas: si el render de los círculos se rompe, el
+              // atributo seguiría estando y la prueba pasaría igual.
+              .find('[role="img"]')
+              .should('have.length', Number(candidato.puntuacion));
           });
       });
     });
 
     it('deja vacía la columna de una fase sin candidatos', () => {
+      // Anclaje: las columnas se pintan antes que las tarjetas, así que sin
+      // esperar a que el tablero esté completo, el "no existe" de abajo se
+      // cumpliría en la ventana intermedia y la prueba pasaría aunque el
+      // reparto hubiera puesto a alguien en esta fase.
+      cy.get('[data-testid="candidate-card"]').should('have.length', 3);
+
       cy.get(columna(FASES.manager.titulo))
         .find('[data-testid="candidate-card"]')
         .should('not.exist');
@@ -188,9 +213,23 @@ describe('Vista "position" — tablero de candidatos por fase', () => {
       cy.get(columna(FASES.screening.titulo))
         .find(tarjeta(CANDIDATOS.carlosGarcia))
         .should('not.exist');
+
+      // A propósito, esta prueba NO espera el PUT: verifica solo lo que ve la
+      // persona. Que el backend se entere es asunto de la prueba siguiente, y
+      // mantenerlas separadas es lo que permite distinguir un fallo de interfaz
+      // de uno de persistencia. El riesgo de que un PUT en vuelo ensucie la
+      // prueba siguiente lo cubre la precondición que cada una afirma.
     });
 
     it('actualiza la fase en el backend con PUT /candidates/:id', () => {
+      // La precondición se afirma en cada prueba, no solo en la primera: si el
+      // candidato ya estuviera en la fase de destino, el movimiento sería de
+      // cero columnas y el PUT saldría igual, con la fase correcta y sin que
+      // nada se haya movido. La prueba pasaría sin probar nada.
+      cy.get(columna(FASES.screening.titulo))
+        .find(tarjeta(CANDIDATOS.carlosGarcia))
+        .should('exist');
+
       moverCandidatoA(CANDIDATOS.carlosGarcia, FASES.tecnica);
 
       cy.wait('@actualizarFase').then(({ request, response }) => {
@@ -207,6 +246,10 @@ describe('Vista "position" — tablero de candidatos por fase', () => {
     });
 
     it('conserva la nueva fase después de recargar la página', () => {
+      cy.get(columna(FASES.screening.titulo))
+        .find(tarjeta(CANDIDATOS.carlosGarcia))
+        .should('exist');
+
       moverCandidatoA(CANDIDATOS.carlosGarcia, FASES.tecnica);
       cy.wait('@actualizarFase');
 
@@ -218,6 +261,10 @@ describe('Vista "position" — tablero de candidatos por fase', () => {
     });
 
     it('permite mover un candidato hacia atrás en el proceso', () => {
+      cy.get(columna(FASES.tecnica.titulo))
+        .find(tarjeta(CANDIDATOS.johnDoe))
+        .should('exist');
+
       moverCandidatoA(CANDIDATOS.johnDoe, FASES.screening);
 
       cy.wait('@actualizarFase').then(({ request }) => {
