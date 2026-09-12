@@ -344,6 +344,13 @@ aparecieron al ejecutarlo.
 - **No hay integración continua.** El enunciado no la pide y montarla habría sido alcance ajeno.
 - **Las pruebas necesitan el backend y la base reales**, que es lo que las hace end-to-end y también lo
   que las hace más lentas y frágiles que una prueba con dobles.
+- **El montaje usa el mismo endpoint que verifica una de las pruebas.** El estado de partida se impone
+  con `PUT /candidates/:id`, que es lo que comprueba la prueba 7: hay una dependencia circular parcial.
+  Está acotada por dos lados —si ese endpoint responde con error, `cy.request` corta la prueba; y si
+  respondiera bien pero guardara mal, la prueba 3 lo detectaría porque el tablero no coincidiría con lo
+  esperado—, pero no eliminada. Lo limpio sería sembrar la base desde fuera de la aplicación antes de
+  cada suite, de modo que el montaje no dependa de nada que se esté probando. Se dejó así porque exigía
+  una tarea de base de datos desde Cypress, más maquinaria de la que este ejercicio justifica.
 - **F11 y F13 quedan sin resolver a propósito**, porque las dos exigen tocar el backend y el enunciado
   circunscribe los cambios a `/frontend`.
 - **Todo el código generado con asistencia de IA fue revisado y ejecutado antes de entrar**, y cada
