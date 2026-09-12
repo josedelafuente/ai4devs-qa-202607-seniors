@@ -52,8 +52,17 @@ const PositionsDetails = () => {
             }
         };
 
-        fetchInterviewFlow();
-        fetchCandidates();
+        // Las dos cargas van en secuencia, no en paralelo: fetchCandidates reparte
+        // los candidatos sobre las fases con setStages(prevStages => ...), así que
+        // si resuelve antes que fetchInterviewFlow, prevStages es [] y los
+        // candidatos se pierden sin reintento. El tablero queda con las columnas
+        // vacías de forma intermitente.
+        const cargarTablero = async () => {
+            await fetchInterviewFlow();
+            await fetchCandidates();
+        };
+
+        cargarTablero();
     }, [id]);
 
     const updateCandidateStep = async (candidateId, applicationId, newStep) => {
