@@ -1,0 +1,143 @@
+CONTROLES POSITIVOS — suite E2E de la vista position
+Fecha: 2026-09-11 22:47
+
+Cada bloque rompe a propósito una cosa que la suite dice vigilar.
+Un control es VÁLIDO si caen las pruebas que cubren esa cosa, y solo esas.
+=== Línea base: la suite sin mutar debe pasar entera ===
+    ✓ muestra el título de la posición (865ms)
+    ✓ muestra una columna por cada fase del proceso de contratación (243ms)
+    ✓ muestra cada candidato en la columna de su fase actual, con su nombre y su puntuación (259ms)
+    ✓ deja vacía la columna de una fase sin candidatos (195ms)
+    ✓ pinta los candidatos aunque las fases lleguen después que ellos (1775ms)
+    ✓ mueve la tarjeta del candidato a la nueva columna (541ms)
+    ✓ actualiza la fase en el backend con PUT /candidates/:id (563ms)
+    ✓ conserva la nueva fase después de recargar la página (679ms)
+    ✓ permite mover un candidato hacia atrás en el proceso (576ms)
+    ✓ una posición cuyo flujo no tiene fases no muestra ninguna columna (175ms)
+    10 passing (6s)
+
+════════════════════════════════════════════════════════════
+MUTACIÓN: El título de la posición deja de mostrarse
+  archivo: PositionDetails.js
+  resultado:
+    1) muestra el título de la posición
+    ✓ muestra una columna por cada fase del proceso de contratación (242ms)
+    ✓ muestra cada candidato en la columna de su fase actual, con su nombre y su puntuación (241ms)
+    ✓ deja vacía la columna de una fase sin candidatos (177ms)
+    ✓ pinta los candidatos aunque las fases lleguen después que ellos (1721ms)
+    ✓ mueve la tarjeta del candidato a la nueva columna (575ms)
+    ✓ actualiza la fase en el backend con PUT /candidates/:id (584ms)
+    ✓ conserva la nueva fase después de recargar la página (727ms)
+    ✓ permite mover un candidato hacia atrás en el proceso (547ms)
+    2) una posición cuyo flujo no tiene fases no muestra ninguna columna
+    8 passing (14s)
+    2 failing
+    1) Vista "position" — tablero de candidatos por fase
+    2) Vista "position" — tablero de candidatos por fase
+
+════════════════════════════════════════════════════════════
+MUTACIÓN: Las columnas pierden el atributo que las identifica
+  archivo: StageColumn.js
+  resultado:
+    ✓ muestra el título de la posición (859ms)
+    1) muestra una columna por cada fase del proceso de contratación
+    2) muestra cada candidato en la columna de su fase actual, con su nombre y su puntuación
+    3) deja vacía la columna de una fase sin candidatos
+    4) pinta los candidatos aunque las fases lleguen después que ellos
+    5) mueve la tarjeta del candidato a la nueva columna
+    6) actualiza la fase en el backend con PUT /candidates/:id
+    7) conserva la nueva fase después de recargar la página
+    8) permite mover un candidato hacia atrás en el proceso
+    ✓ una posición cuyo flujo no tiene fases no muestra ninguna columna (190ms)
+    2 passing (38s)
+    8 failing
+    1) Vista "position" — tablero de candidatos por fase
+    2) Vista "position" — tablero de candidatos por fase
+    3) Vista "position" — tablero de candidatos por fase
+    4) Vista "position" — tablero de candidatos por fase
+    5) Vista "position" — tablero de candidatos por fase
+    6) Vista "position" — tablero de candidatos por fase
+    7) Vista "position" — tablero de candidatos por fase
+    8) Vista "position" — tablero de candidatos por fase
+
+════════════════════════════════════════════════════════════
+MUTACIÓN: El reparto de candidatos por fase se rompe (compara contra la fase equivocada)
+  archivo: PositionDetails.js
+  resultado:
+    ✓ muestra el título de la posición (-1010ms)
+    ✓ muestra una columna por cada fase del proceso de contratación (255ms)
+    1) muestra cada candidato en la columna de su fase actual, con su nombre y su puntuación
+    2) deja vacía la columna de una fase sin candidatos
+    3) pinta los candidatos aunque las fases lleguen después que ellos
+    4) mueve la tarjeta del candidato a la nueva columna
+    5) actualiza la fase en el backend con PUT /candidates/:id
+    6) conserva la nueva fase después de recargar la página
+    7) permite mover un candidato hacia atrás en el proceso
+    ✓ una posición cuyo flujo no tiene fases no muestra ninguna columna (212ms)
+    3 passing (32s)
+    7 failing
+    1) Vista "position" — tablero de candidatos por fase
+    2) Vista "position" — tablero de candidatos por fase
+    3) Vista "position" — tablero de candidatos por fase
+    4) Vista "position" — tablero de candidatos por fase
+    5) Vista "position" — tablero de candidatos por fase
+    6) Vista "position" — tablero de candidatos por fase
+    7) Vista "position" — tablero de candidatos por fase
+
+════════════════════════════════════════════════════════════
+MUTACIÓN: El cambio de fase deja de avisar al backend
+  archivo: PositionDetails.js
+  resultado:
+    ✓ muestra el título de la posición (831ms)
+    ✓ muestra una columna por cada fase del proceso de contratación (241ms)
+    ✓ muestra cada candidato en la columna de su fase actual, con su nombre y su puntuación (255ms)
+    ✓ deja vacía la columna de una fase sin candidatos (197ms)
+    ✓ pinta los candidatos aunque las fases lleguen después que ellos (1766ms)
+    ✓ mueve la tarjeta del candidato a la nueva columna (546ms)
+    1) actualiza la fase en el backend con PUT /candidates/:id
+    2) conserva la nueva fase después de recargar la página
+    3) permite mover un candidato hacia atrás en el proceso
+    ✓ una posición cuyo flujo no tiene fases no muestra ninguna columna (230ms)
+    7 passing (21s)
+    3 failing
+    1) Vista "position" — tablero de candidatos por fase
+    2) Vista "position" — tablero de candidatos por fase
+    3) Vista "position" — tablero de candidatos por fase
+
+════════════════════════════════════════════════════════════
+MUTACIÓN: La puntuación de la tarjeta deja de exponerse
+  archivo: CandidateCard.js
+  resultado:
+    ✓ muestra el título de la posición (803ms)
+    ✓ muestra una columna por cada fase del proceso de contratación (251ms)
+    1) muestra cada candidato en la columna de su fase actual, con su nombre y su puntuación
+    ✓ deja vacía la columna de una fase sin candidatos (193ms)
+    ✓ pinta los candidatos aunque las fases lleguen después que ellos (-17ms)
+    ✓ mueve la tarjeta del candidato a la nueva columna (566ms)
+    ✓ actualiza la fase en el backend con PUT /candidates/:id (545ms)
+    ✓ conserva la nueva fase después de recargar la página (697ms)
+    ✓ permite mover un candidato hacia atrás en el proceso (555ms)
+    ✓ una posición cuyo flujo no tiene fases no muestra ninguna columna (176ms)
+    9 passing (8s)
+    1 failing
+    1) Vista "position" — tablero de candidatos por fase
+
+════════════════════════════════════════════════════════════
+MUTACIÓN: Se revierte el arreglo de la condición de carrera (las cargas vuelven a ir en paralelo)
+  archivo: PositionDetails.js
+  resultado:
+    ✓ muestra el título de la posición (819ms)
+    ✓ muestra una columna por cada fase del proceso de contratación (256ms)
+    ✓ muestra cada candidato en la columna de su fase actual, con su nombre y su puntuación (322ms)
+    ✓ deja vacía la columna de una fase sin candidatos (213ms)
+    1) pinta los candidatos aunque las fases lleguen después que ellos
+    ✓ mueve la tarjeta del candidato a la nueva columna (567ms)
+    ✓ actualiza la fase en el backend con PUT /candidates/:id (558ms)
+    ✓ conserva la nueva fase después de recargar la página (678ms)
+    ✓ permite mover un candidato hacia atrás en el proceso (553ms)
+    ✓ una posición cuyo flujo no tiene fases no muestra ninguna columna (179ms)
+    9 passing (10s)
+    1 failing
+    1) Vista "position" — tablero de candidatos por fase
+
+Archivos restaurados. Resultado completo en: /home/josef/LIDR/clases/clase-11/ai4devs-qa-202607-seniors/prompts/evidencia/controles-positivos.txt
